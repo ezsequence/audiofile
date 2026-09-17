@@ -1,0 +1,46 @@
+{
+  "name": "audiofile",
+  "version": "0.0.5",
+  "type": "module",
+  "main": "./dist/node.cjs",
+  "module": "./dist/node.mjs",
+  "types": "./dist/node.d.ts",
+  "license": "AGPL-3.0-only",
+  "exports": {
+    ".": {
+      "browser": {
+        "types": "./dist/browser.d.ts",
+        "import": "./dist/browser.mjs"
+      },
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.mjs",
+      "require": "./dist/node.cjs"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "import": "./dist/browser.mjs"
+    },
+    "./node": {
+      "types": "./dist/node.d.ts",
+      "import": "./dist/node.mjs",
+      "require": "./dist/node.cjs"
+    }
+  },
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build:browser": "esbuild src/index.browser.ts --bundle --format=esm --platform=browser --target=es2020 --minify --tree-shaking=true --legal-comments=none --outfile=dist/browser.mjs",
+    "build:node:mjs": "esbuild src/index.node.ts --bundle --format=esm --platform=node --target=node18 --minify --tree-shaking=true --legal-comments=none --outfile=dist/node.mjs",
+    "build:node:cjs": "esbuild src/index.node.ts --bundle --format=cjs --platform=node --target=node18 --minify --tree-shaking=true --legal-comments=none --outfile=dist/node.cjs",
+    "build:types:browser": "pnpm exec dts-bundle-generator -o dist/browser.d.ts src/index.browser.ts",
+    "build:types:node": "pnpm exec dts-bundle-generator -o dist/node.d.ts src/index.node.ts",
+    "build": "pnpm build:browser && pnpm build:node:mjs && pnpm build:node:cjs && pnpm build:types:browser && pnpm build:types:node"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "dts-bundle-generator": "^9.5.1",
+    "esbuild": "^0.27.2",
+    "typescript": "^5.9.3"
+  }
+}

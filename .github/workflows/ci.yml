@@ -1,0 +1,23 @@
+# Verifies audiofile builds standalone: bundle + full typecheck.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: pnpm install --no-frozen-lockfile
+      - run: pnpm build
+      # Full typecheck (the esbuild bundle step does not typecheck).
+      - run: pnpm exec tsc -p tsconfig.json
